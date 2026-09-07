@@ -1,0 +1,6 @@
+Station,Lat,Lng,Network,Status,kW
+CSV near station 1 (duplicate),17.4101,78.4101,Alt Op,operational,3.3
+CSV in ward 4,17.415,78.470,Alt Op,no,
+CSV unknown status,17.42,78.44,,,22
+No coordinates,,,Alt Op,yes,7
+Bad latitude,95,78.44,Alt Op,yes,7

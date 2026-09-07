@@ -1,0 +1,2 @@
+name,latitude,longitude,operator,status,power_kw,connections
+Example charger (delete this row),17.4123,78.4432,Example Operator,yes,7.4,2

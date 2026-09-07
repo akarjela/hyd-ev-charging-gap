@@ -51,6 +51,13 @@ class OptimizerConfig(BaseModel):
     coverage_threshold: float = Field(0.5, ge=0, le=1)
 
 
+class StationsConfig(BaseModel):
+    source: Literal["ocm", "csv", "both"] = "ocm"
+    ocm_file: str = "ocm_stations.json"
+    csv_file: str = "stations.csv"
+    dedupe_m: float = Field(50, ge=0)
+
+
 class Sources(BaseModel):
     wards_url: str = ""
     ocm_url: str = ""
@@ -64,6 +71,7 @@ class ModelConfig(BaseModel):
     coverage: CoverageConfig = CoverageConfig()
     demand: DemandConfig = DemandConfig()
     optimizer: OptimizerConfig = OptimizerConfig()
+    stations: StationsConfig = StationsConfig()
     expected_wards: int = Field(150, ge=1)
     sources: Sources = Sources()
 

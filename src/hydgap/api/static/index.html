@@ -210,7 +210,8 @@ async function loadLayers() {
   if (meta.population.file) gaps.push(`Census 2011 population matched ${meta.population.matched} wards; ${meta.population.unmatched.length} have no row. Demand weighting is ${meta.demand.mode}.`);
   else gaps.push('No population file was provided; demand is cell area.');
   const s = meta.stations;
-  gaps.push(`${s.kept} chargers from OpenChargeMap${s.fetched_at ? ' (fetched ' + s.fetched_at.slice(0, 10) + ')' : ''}; ${s.unknown_status} have no operational status and ${s.dropped_no_coords} had no coordinates. OpenChargeMap is crowd-sourced and incomplete.`);
+  const from = s.source === 'ocm' ? 'OpenChargeMap' : s.source === 'csv' ? 'a supplied CSV' : 'OpenChargeMap plus a supplied CSV';
+  gaps.push(`${s.kept} chargers from ${from}${s.fetched_at ? ' (fetched ' + s.fetched_at.slice(0, 10) + ')' : ''}; ${s.unknown_status} have no operational status and ${s.dropped_no_coords} rows had no coordinates.${s.source !== 'csv' ? ' OpenChargeMap is crowd-sourced and thin for Hyderabad.' : ''}`);
   gaps.push(`Reach is straight-line, ${meta.config.coverage.service_radius_m / 1000} km. Road distance is longer; see the README for the road-network extension point.`);
   $('gaps').innerHTML = gaps.map((g) => `<li>${g}</li>`).join('');
 }

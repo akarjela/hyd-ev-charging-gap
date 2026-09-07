@@ -10,8 +10,8 @@ from pathlib import Path
 import geopandas as gpd
 
 from hydgap.config import ModelConfig, config_hash
-from hydgap.ingest.ocm import load_stations
 from hydgap.ingest.population import join_population, load_population
+from hydgap.ingest.stations import load_station_layer
 from hydgap.ingest.wards import load_wards, report_ward_gaps
 from hydgap.spatial.aggregate import aggregate_wards
 from hydgap.spatial.coverage import score_cells
@@ -21,6 +21,7 @@ from hydgap.spatial.grid import build_hex_grid
 
 WARDS_FILE = "ghmc-wards.geojson"
 STATIONS_FILE = "ocm_stations.json"
+STATIONS_CSV = "stations.csv"
 POPULATION_FILE = "ward_population_2011.csv"
 
 
@@ -47,7 +48,7 @@ def build_artifacts(cfg: ModelConfig, raw_dir: Path | str, out_dir: Path | str) 
     elif cfg.demand.mode == "population":
         raise FileNotFoundError(f"demand.mode is population but {pop_path} is missing")
 
-    stations, station_report = load_stations(raw / STATIONS_FILE)
+    stations, station_meta = load_station_layer(cfg.stations, raw, cfg.crs_metric)
 
     cells = build_hex_grid(wards, cfg.h3_resolution, cfg.crs_metric)
     cells, demand_report = assign_demand(cells, wards, cfg.demand)
@@ -63,7 +64,7 @@ def build_artifacts(cfg: ModelConfig, raw_dir: Path | str, out_dir: Path | str) 
         "config": cfg.model_dump(),
         "wards": gaps.as_dict(),
         "population": population_meta,
-        "stations": station_report.as_dict(),
+        "stations": station_meta,
         "demand": demand_report.as_dict(),
         "grid": {"h3_resolution": cfg.h3_resolution, "n_cells": len(cells)},
         "coverage": {

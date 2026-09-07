@@ -40,7 +40,8 @@ def build(config: Path = ConfigOpt, raw: Path = RAW, out: Path = PROCESSED) -> N
     w, s, c = meta["wards"], meta["stations"], meta["coverage"]
     typer.echo(f"wards: {w['found']}/{w['expected']} present; missing {w['missing']}; duplicates {w['duplicates']}")
     typer.echo(f"population: {meta['population']['matched']} wards matched, {len(meta['population']['unmatched'])} without a census row")
-    typer.echo(f"stations: {s['kept']} kept of {s['total']} ({s['dropped_no_coords']} without coordinates, {s['unknown_status']} unknown status)")
+    typer.echo(f"stations ({s['source']}): {s['kept']} kept, {s['dropped_no_coords']} rows without coordinates, {s['unknown_status']} unknown status"
+               + (f", {s['duplicates_dropped']} CSV rows within {s['dedupe_m']:.0f} m of an OCM station dropped" if "duplicates_dropped" in s else ""))
     typer.echo(f"grid: {meta['grid']['n_cells']} H3 cells at res {meta['grid']['h3_resolution']}; demand mode {meta['demand']['mode']}")
     typer.echo(
         f"coverage: mean score {c['mean_score']:.3f}; {c['share_cells_covered']:.1%} of cells covered; "

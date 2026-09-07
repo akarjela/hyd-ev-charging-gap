@@ -28,6 +28,12 @@ optimizer:
   candidate_pool: all           # all | uncovered
   coverage_threshold: 0.5       # a cell counts as covered at or above this score
 
+stations:
+  source: ocm                   # ocm | csv | both (both = OCM plus your CSV, deduped)
+  ocm_file: ocm_stations.json   # under data/raw, written by `hydgap fetch`
+  csv_file: stations.csv        # under data/raw, your own list; columns in config/stations.template.csv
+  dedupe_m: 50                  # a CSV row this close to an OCM station is the same charger
+
 expected_wards: 150
 
 sources:

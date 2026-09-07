@@ -72,6 +72,24 @@ Every threshold and weight lives in `config/model.yaml`. The build writes
 `data/processed/build_meta.json` with the config hash, the counts, and
 every data gap it found.
 
+## Bring your own station list
+
+OpenChargeMap is the default because it is open and has an API, but it is
+thin for Hyderabad. If you have a better list you are allowed to use (a
+government release, an operator's published locations, your own survey),
+put it at `data/raw/stations.csv` and set `stations.source` in
+`config/model.yaml` to `csv`, or to `both` to merge it with the
+OpenChargeMap fetch (rows within `dedupe_m` of an existing station are
+treated as the same charger). The columns are in
+`config/stations.template.csv`; only `latitude` and `longitude` are
+required, and common variants such as `lat`, `lng`, `title`, `network`
+are recognised. Rows without coordinates are dropped and counted, and the
+build report names which source produced the numbers.
+
+Do not put scraped data here. PlugShare, CarDekho, ZigWheels and the
+operators' own apps all have terms that forbid it, and the point of this
+project is that every number traces to a source you can name.
+
 ## Data sources
 
 | Layer | Source | Notes |
