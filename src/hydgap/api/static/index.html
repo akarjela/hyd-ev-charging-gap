@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Hyderabad E2W charging gaps</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,500;12..96,600;12..96,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+  :root {
+    --stone: #dcdbd6;
+    --paper: #fbfaf7;
+    --ink: #1b1a33;
+    --ink-soft: #5b5a70;
+    --line: #c9c7c0;
+    --plum: #6b1e5e;
+    --sand: #f1e6c8;
+    --charge: #0e8c7f;
+    --site: #e8641b;
+    --focus: #1b1a33;
+    --font: "Bricolage Grotesque", "Helvetica Neue", Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: var(--stone); color: var(--ink); font-family: var(--font); font-size: 15px; line-height: 1.4; }
+  #map { position: fixed; inset: 0; background: var(--stone); }
+  .panel {
+    position: fixed; top: 16px; left: 16px; bottom: 16px; width: 372px;
+    background: var(--paper); color: var(--ink);
+    border: 1px solid var(--line); box-shadow: 0 12px 40px rgba(27, 26, 51, .18);
+    display: flex; flex-direction: column; overflow: hidden; z-index: 1000;
+  }
+  .panel header { padding: 20px 22px 14px; border-bottom: 1px solid var(--line); }
+  .panel h1 { margin: 0; font-size: 30px; line-height: 1; font-weight: 700; letter-spacing: -0.02em; font-variation-settings: "opsz" 96; }
+  .panel h1 small { display: block; font-size: 15px; font-weight: 500; color: var(--ink-soft); letter-spacing: 0; margin-top: 6px; font-variation-settings: "opsz" 12; }
+  .scroll { overflow: auto; flex: 1; }
+  section { padding: 16px 22px; border-bottom: 1px solid var(--line); }
+  section:last-child { border-bottom: 0; }
+  h2 { margin: 0 0 8px; font-size: 16px; font-weight: 600; }
+  p { margin: 0 0 8px; color: var(--ink-soft); }
+  .budget-row { display: flex; align-items: baseline; gap: 10px; }
+  .budget-row output { font-size: 44px; font-weight: 700; line-height: 1; letter-spacing: -0.03em; font-variation-settings: "opsz" 96; min-width: 2.2ch; }
+  .budget-row label { color: var(--ink-soft); }
+  input[type=range] { width: 100%; accent-color: var(--site); margin: 10px 0 4px; }
+  input[type=range]:focus-visible, button:focus-visible, input[type=number]:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+  .cost { display: flex; align-items: center; gap: 8px; color: var(--ink-soft); font-size: 14px; }
+  .cost input { width: 64px; font: inherit; padding: 3px 6px; border: 1px solid var(--line); background: #fff; color: var(--ink); }
+  .gains { display: flex; align-items: flex-end; gap: 2px; height: 72px; margin-top: 12px; border-bottom: 1px solid var(--line); padding-bottom: 2px; }
+  .gains i { flex: 1; background: var(--site); min-height: 2px; position: relative; transition: height 220ms cubic-bezier(.2,.8,.2,1); }
+  .gains i:hover::after, .gains i.on::after { content: attr(data-label); position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); white-space: nowrap; font-size: 12px; color: var(--ink); background: var(--paper); padding: 1px 4px; border: 1px solid var(--line); }
+  .gains-caption { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-soft); margin-top: 6px; }
+  .summary { display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; margin-top: 12px; font-size: 14px; }
+  .summary b { display: block; font-size: 22px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.1; }
+  .summary span { color: var(--ink-soft); }
+  ol.ranking { list-style: none; margin: 0; padding: 0; }
+  ol.ranking li { display: grid; grid-template-columns: 26px 1fr auto; gap: 8px; align-items: baseline; padding: 6px 0; border-top: 1px solid var(--line); cursor: pointer; }
+  ol.ranking li:first-child { border-top: 0; }
+  ol.ranking li:hover, ol.ranking li:focus-visible { background: var(--sand); outline: none; margin: 0 -8px; padding-left: 8px; padding-right: 8px; }
+  ol.ranking .n { color: var(--ink-soft); font-size: 13px; }
+  ol.ranking .name { font-weight: 500; }
+  ol.ranking .fig { font-size: 13px; color: var(--ink-soft); white-space: nowrap; }
+  .swatch { display: inline-block; width: 10px; height: 10px; margin-right: 4px; vertical-align: -1px; }
+  .layers label { display: flex; align-items: center; gap: 8px; padding: 4px 0; cursor: pointer; }
+  .layers input { accent-color: var(--ink); }
+  .gaps ul { margin: 0; padding-left: 18px; color: var(--ink-soft); font-size: 14px; }
+  .gaps li { margin: 3px 0; }
+  .legend { position: fixed; right: 16px; bottom: 16px; z-index: 1000; background: var(--paper); border: 1px solid var(--line); padding: 10px 12px; font-size: 13px; box-shadow: 0 6px 24px rgba(27,26,51,.14); }
+  .legend .ramp { height: 10px; width: 180px; background: linear-gradient(90deg, var(--plum), #b5578c 45%, #e6bfa6 75%, var(--sand)); margin: 6px 0 4px; }
+  .legend .ends { display: flex; justify-content: space-between; color: var(--ink-soft); }
+  .legend .row { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+  .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .site-marker { background: var(--site); color: #fff; border-radius: 50%; width: 24px; height: 24px; display: grid; place-items: center; font: 600 12px var(--font); border: 2px solid #fff; box-shadow: 0 2px 6px rgba(0,0,0,.35); }
+  .leaflet-container { font-family: var(--font); }
+  .leaflet-tile-pane .basemap { filter: grayscale(1) contrast(0.85) brightness(1.05); opacity: 0.75; }
+  .leaflet-tooltip { font-family: var(--font); }
+  .status { font-size: 13px; color: var(--ink-soft); min-height: 1.2em; }
+  .error { color: #a4212b; }
+  @media (max-width: 760px) {
+    .panel { top: auto; left: 0; right: 0; bottom: 0; width: auto; max-height: 55vh; border-left: 0; border-right: 0; }
+    .legend { bottom: calc(55vh + 12px); }
+  }
+  @media (prefers-reduced-motion: reduce) { .gains i { transition: none; } }
+</style>
+</head>
+<body>
+<div id="map" role="application" aria-label="Map of charging coverage in Hyderabad"></div>
+
+<aside class="panel">
+  <header>
+    <h1>Where Hyderabad's e-scooters can't charge <small>Coverage by ward from OpenChargeMap stations, and where the next stations should go.</small></h1>
+  </header>
+  <div class="scroll">
+    <section>
+      <div class="budget-row"><output id="budgetOut">10</output><label for="budget">new stations</label></div>
+      <input id="budget" type="range" min="1" max="40" value="10" aria-label="Number of new stations">
+      <div class="cost"><label for="cost">cost per site</label><input id="cost" type="number" min="0.1" step="0.5" value="1"> <span>budget = stations × cost</span></div>
+      <div class="gains" id="gains" aria-label="Demand newly covered by each station, in order"></div>
+      <div class="gains-caption"><span>first station</span><span>each bar: demand newly covered</span><span>last</span></div>
+      <div class="summary">
+        <div><b id="coveredBefore">–</b><span>of demand covered now</span></div>
+        <div><b id="coveredAfter">–</b><span>after these stations</span></div>
+      </div>
+      <div class="status" id="status"></div>
+    </section>
+    <section>
+      <h2>Wards with the most uncovered demand</h2>
+      <p>Click a ward to zoom to it. Demand is cell area unless population weighting is on.</p>
+      <ol class="ranking" id="ranking"></ol>
+    </section>
+    <section class="layers">
+      <h2>Layers</h2>
+      <label><input type="checkbox" id="lyWards" checked> <i class="swatch" style="background:var(--plum)"></i> Ward coverage</label>
+      <label><input type="checkbox" id="lyCells"> <i class="swatch" style="background:#b5578c"></i> Hex cells</label>
+      <label><input type="checkbox" id="lyStations" checked> <i class="swatch" style="background:var(--charge);border-radius:50%"></i> Existing chargers</label>
+      <label><input type="checkbox" id="lySites" checked> <i class="swatch" style="background:var(--site);border-radius:50%"></i> Proposed sites</label>
+    </section>
+    <section class="gaps">
+      <h2>What the data cannot tell you</h2>
+      <ul id="gaps"><li>Loading the build report…</li></ul>
+    </section>
+  </div>
+</aside>
+
+<div class="legend" aria-hidden="true">
+  <div>Coverage score by ward</div>
+  <div class="ramp"></div>
+  <div class="ends"><span>none</span><span>well served</span></div>
+  <div class="row"><i class="dot" style="background:var(--charge)"></i> existing charger</div>
+  <div class="row"><i class="dot" style="background:var(--site)"></i> proposed site, numbered in order</div>
+</div>
+
+<script>
+const $ = (id) => document.getElementById(id);
+const map = L.map('map', { zoomControl: false }).setView([17.42, 78.47], 11);
+L.control.zoom({ position: 'topright' }).addTo(map);
+L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors', maxZoom: 19, className: 'basemap',
+}).addTo(map);
+
+function ramp(score) {
+  const stops = [[0, [107, 30, 94]], [0.45, [181, 87, 140]], [0.75, [230, 191, 166]], [1, [241, 230, 200]]];
+  const s = Math.max(0, Math.min(1, score ?? 0));
+  for (let i = 1; i < stops.length; i++) {
+    if (s <= stops[i][0]) {
+      const [a, ca] = stops[i - 1], [b, cb] = stops[i];
+      const t = (s - a) / (b - a);
+      return `rgb(${ca.map((v, k) => Math.round(v + (cb[k] - v) * t)).join(',')})`;
+    }
+  }
+  return 'rgb(241,230,200)';
+}
+const pct = (x) => `${Math.round(x * 100)}%`;
+
+const layers = {};
+let wardIndex = {};
+
+async function getJSON(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(`${url} → ${r.status}`);
+  return r.json();
+}
+
+async function loadLayers() {
+  const [wards, cells, stations, meta] = await Promise.all([
+    getJSON('/api/wards'), getJSON('/api/cells'), getJSON('/api/stations'), getJSON('/api/meta'),
+  ]);
+  layers.wards = L.geoJSON(wards, {
+    style: (f) => ({ color: '#fbfaf7', weight: 1, fillColor: ramp(f.properties.mean_score), fillOpacity: 0.78 }),
+    onEachFeature: (f, l) => {
+      const p = f.properties;
+      wardIndex[p.ward_no] = l;
+      l.bindTooltip(`<b>${p.ward_name || 'Ward ' + p.ward_no}</b> (ward ${p.ward_no})<br>rank ${p.rank} of ${wards.features.length}<br>coverage ${pct(p.mean_score)} · ${pct(p.share_zero_chargers)} of cells with no charger in reach`, { sticky: true });
+    },
+  }).addTo(map);
+  layers.cells = L.geoJSON(cells, {
+    style: (f) => ({ color: '#fbfaf7', weight: 0.5, fillColor: ramp(f.properties.score), fillOpacity: 0.85 }),
+    onEachFeature: (f, l) => {
+      const p = f.properties;
+      l.bindTooltip(`score ${p.score.toFixed(2)} · ${p.n_within} charger${p.n_within === 1 ? '' : 's'} within reach · nearest ${Math.round(p.nearest_m)} m`, { sticky: true });
+    },
+  });
+  layers.stations = L.geoJSON(stations, {
+    pointToLayer: (f, ll) => L.circleMarker(ll, { radius: 4.5, color: '#fbfaf7', weight: 1, fillColor: '#0e8c7f', fillOpacity: 0.95 }),
+    onEachFeature: (f, l) => {
+      const p = f.properties;
+      const status = p.is_operational === null ? 'status unknown' : p.is_operational ? 'operational' : 'not operational';
+      l.bindTooltip(`<b>${p.title || 'Charger'}</b><br>${p.operator || 'operator unknown'} · ${p.n_connections} connection${p.n_connections === 1 ? '' : 's'}${p.max_power_kw ? ' · up to ' + p.max_power_kw + ' kW' : ''}<br>${status}`, { sticky: true });
+    },
+  }).addTo(map);
+  layers.sites = L.layerGroup().addTo(map);
+  map.fitBounds(layers.wards.getBounds(), { paddingTopLeft: [400, 20], paddingBottomRight: [20, 20] });
+
+  const ranking = $('ranking');
+  ranking.innerHTML = '';
+  wards.features.map((f) => f.properties).sort((a, b) => a.rank - b.rank).slice(0, 10).forEach((p) => {
+    const li = document.createElement('li');
+    li.tabIndex = 0;
+    li.innerHTML = `<span class="n">${p.rank}</span><span class="name">${p.ward_name || 'Ward ' + p.ward_no}</span><span class="fig">${pct(p.mean_score)} covered</span>`;
+    const go = () => { const l = wardIndex[p.ward_no]; if (l) { map.fitBounds(l.getBounds(), { paddingTopLeft: [400, 40], paddingBottomRight: [40, 40], maxZoom: 14 }); l.openTooltip(); } };
+    li.addEventListener('click', go);
+    li.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); go(); } });
+    ranking.appendChild(li);
+  });
+
+  const gaps = [];
+  const w = meta.wards;
+  if (w.missing.length) gaps.push(`${w.missing.length} of ${w.expected} wards have no boundary in the OpenStreetMap file (wards ${w.missing.join(', ')}). They are not assessed.`);
+  if (w.duplicates.length) gaps.push(`Ward number${w.duplicates.length > 1 ? 's' : ''} ${w.duplicates.join(', ')} appear${w.duplicates.length > 1 ? '' : 's'} on more than one polygon in the source; both are kept under that number.`);
+  if (meta.population.file) gaps.push(`Census 2011 population matched ${meta.population.matched} wards; ${meta.population.unmatched.length} have no row. Demand weighting is ${meta.demand.mode}.`);
+  else gaps.push('No population file was provided; demand is cell area.');
+  const s = meta.stations;
+  gaps.push(`${s.kept} chargers from OpenChargeMap${s.fetched_at ? ' (fetched ' + s.fetched_at.slice(0, 10) + ')' : ''}; ${s.unknown_status} have no operational status and ${s.dropped_no_coords} had no coordinates. OpenChargeMap is crowd-sourced and incomplete.`);
+  gaps.push(`Reach is straight-line, ${meta.config.coverage.service_radius_m / 1000} km. Road distance is longer; see the README for the road-network extension point.`);
+  $('gaps').innerHTML = gaps.map((g) => `<li>${g}</li>`).join('');
+}
+
+let optimizeTimer;
+async function runOptimize() {
+  const n = Number($('budget').value);
+  const cost = Number($('cost').value) || 1;
+  $('budgetOut').textContent = n;
+  $('status').textContent = 'Placing stations…';
+  $('status').classList.remove('error');
+  try {
+    const r = await getJSON(`/api/optimize?budget=${n * cost}&site_cost=${cost}`);
+    layers.sites.clearLayers();
+    r.sites.forEach((s) => {
+      L.marker([s.lat, s.lon], { icon: L.divIcon({ className: '', html: `<div class="site-marker">${s.order}</div>`, iconSize: [24, 24], iconAnchor: [12, 12] }) })
+        .bindTooltip(`Station ${s.order}${s.ward_no ? ' · ward ' + s.ward_no : ''}<br>newly covers ${s.marginal_gain.toFixed(2)} of demand`, { sticky: true })
+        .addTo(layers.sites);
+    });
+    const g = $('gains');
+    g.innerHTML = '';
+    const max = Math.max(...r.sites.map((s) => s.marginal_gain), 1e-9);
+    r.sites.forEach((s) => {
+      const bar = document.createElement('i');
+      bar.style.height = `${Math.max(2, (s.marginal_gain / max) * 100)}%`;
+      bar.dataset.label = `#${s.order}: ${s.marginal_gain.toFixed(1)}`;
+      g.appendChild(bar);
+    });
+    $('coveredBefore').textContent = pct(r.baseline_covered / r.total_demand);
+    $('coveredAfter').textContent = pct(r.covered_after / r.total_demand);
+    $('status').textContent = r.sites.length < n ? `Only ${r.sites.length} sites add coverage; the rest of the budget would change nothing.` : `${r.sites.length} sites placed.`;
+  } catch (e) {
+    $('status').textContent = `Could not run the optimizer: ${e.message}`;
+    $('status').classList.add('error');
+  }
+}
+function scheduleOptimize() {
+  $('budgetOut').textContent = $('budget').value;
+  clearTimeout(optimizeTimer);
+  optimizeTimer = setTimeout(runOptimize, 300);
+}
+$('budget').addEventListener('input', scheduleOptimize);
+$('cost').addEventListener('input', scheduleOptimize);
+
+const toggle = (id, key) => $(id).addEventListener('change', (e) => { if (!layers[key]) return; e.target.checked ? layers[key].addTo(map) : map.removeLayer(layers[key]); });
+toggle('lyWards', 'wards'); toggle('lyCells', 'cells'); toggle('lyStations', 'stations'); toggle('lySites', 'sites');
+
+loadLayers().then(runOptimize).catch((e) => { $('status').textContent = `Could not load the map data: ${e.message}. Run \`make build\` first.`; $('status').classList.add('error'); });
+</script>
+</body>
+</html>

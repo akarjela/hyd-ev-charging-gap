@@ -1,0 +1,11 @@
+# `docker compose up` builds the artifacts from the cached raw data and serves the map on :8000.
+# Unverified on the author's machine (no Docker installed); see the README.
+services:
+  hydgap:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+    environment:
+      OCM_API_KEY: ${OCM_API_KEY:-}

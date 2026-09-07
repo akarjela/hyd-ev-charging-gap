@@ -1,0 +1,77 @@
+{
+ "fetched_at": "2026-01-01T00:00:00+00:00",
+ "source": "fixture",
+ "count": 4,
+ "pois": [
+  {
+   "ID": 1,
+   "AddressInfo": {
+    "Title": "Station 1",
+    "Latitude": 17.41,
+    "Longitude": 78.41
+   },
+   "OperatorInfo": {
+    "Title": "Test Op"
+   },
+   "Connections": [
+    {
+     "ConnectionType": {
+      "Title": "Type 2"
+     },
+     "PowerKW": 7.4
+    }
+   ],
+   "StatusType": {
+    "IsOperational": true
+   }
+  },
+  {
+   "ID": 2,
+   "AddressInfo": {
+    "Title": "Station 2",
+    "Latitude": 17.42,
+    "Longitude": 78.42
+   },
+   "OperatorInfo": {
+    "Title": "Test Op"
+   },
+   "Connections": [
+    {
+     "ConnectionType": {
+      "Title": "Type 2"
+     },
+     "PowerKW": null
+    }
+   ]
+  },
+  {
+   "ID": 3,
+   "AddressInfo": {
+    "Title": "Station 3",
+    "Latitude": 17.41,
+    "Longitude": 78.4282
+   },
+   "OperatorInfo": {
+    "Title": "Test Op"
+   },
+   "Connections": [
+    {
+     "ConnectionType": {
+      "Title": "Type 2"
+     },
+     "PowerKW": 3.3
+    }
+   ],
+   "StatusType": {
+    "IsOperational": true
+   }
+  },
+  {
+   "ID": 4,
+   "AddressInfo": {
+    "Title": "No coords"
+   },
+   "Connections": []
+  }
+ ]
+}

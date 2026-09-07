@@ -1,0 +1,36 @@
+# Every threshold, weight and formula term the model uses. Nothing numeric
+# lives in the code.
+
+crs_metric: EPSG:32644          # UTM zone 44N, metres, covers Hyderabad
+h3_resolution: 8                # ~0.74 km^2 per hexagon
+
+bbox:                           # fetch window: the GHMC wards plus a margin
+  min_lat: 17.20
+  min_lon: 78.20
+  max_lat: 17.65
+  max_lon: 78.70
+
+coverage:
+  service_radius_m: 2000        # a two-wheeler's comfortable detour to charge
+  target_chargers: 2            # count term saturates at this many in radius
+  distance_decay_m: 1500        # distance term = exp(-nearest_m / this)
+  w_count: 0.6
+  w_distance: 0.4
+  require_operational: false    # OCM StatusType is often null; keep unknowns, count them
+
+demand:
+  mode: uniform                 # uniform (cell area) | population (census, where matched)
+
+optimizer:
+  method: greedy
+  site_cost: 1.0
+  default_budget: 10
+  candidate_pool: all           # all | uncovered
+  coverage_threshold: 0.5       # a cell counts as covered at or above this score
+
+expected_wards: 150
+
+sources:
+  wards_url: https://raw.githubusercontent.com/datameet/Municipal_Spatial_Data/master/Hyderabad/ghmc-wards.geojson
+  ocm_url: https://api.openchargemap.io/v3/poi/
+  population_url: https://data.opencity.in/dataset/hyderabad-census-2011-data

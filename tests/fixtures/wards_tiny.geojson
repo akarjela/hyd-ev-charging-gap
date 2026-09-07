@@ -1,0 +1,107 @@
+{
+ "type": "FeatureCollection",
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Ward 1 Alpha",
+    "admin_level": "10"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       78.4,
+       17.4
+      ],
+      [
+       78.4282,
+       17.4
+      ],
+      [
+       78.4282,
+       17.4271
+      ],
+      [
+       78.4,
+       17.4271
+      ],
+      [
+       78.4,
+       17.4
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Ward 2 Bravo",
+    "admin_level": "10"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       78.4282,
+       17.4
+      ],
+      [
+       78.4564,
+       17.4
+      ],
+      [
+       78.4564,
+       17.4271
+      ],
+      [
+       78.4282,
+       17.4271
+      ],
+      [
+       78.4282,
+       17.4
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Ward 4 Delta",
+    "admin_level": "10"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       78.4564,
+       17.4
+      ],
+      [
+       78.4846,
+       17.4
+      ],
+      [
+       78.4846,
+       17.4271
+      ],
+      [
+       78.4564,
+       17.4271
+      ],
+      [
+       78.4564,
+       17.4
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}

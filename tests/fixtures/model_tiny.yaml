@@ -1,0 +1,7 @@
+crs_metric: EPSG:32644
+h3_resolution: 9
+bbox: {min_lat: 17.39, min_lon: 78.39, max_lat: 17.44, max_lon: 78.49}
+coverage: {service_radius_m: 2000, target_chargers: 2, distance_decay_m: 1500, w_count: 0.6, w_distance: 0.4, require_operational: false}
+demand: {mode: uniform}
+optimizer: {method: greedy, site_cost: 1.0, default_budget: 3, candidate_pool: all, coverage_threshold: 0.5}
+expected_wards: 4
