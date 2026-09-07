@@ -81,6 +81,14 @@ every data gap it found.
 | Ward population (optional) | [Hyderabad Census 2011 data, data.opencity.in](https://data.opencity.in/dataset/hyderabad-census-2011-data) | Hyderabad district only |
 | Basemap tiles | [OpenStreetMap standard tiles](https://www.openstreetmap.org/copyright) | Display only; desaturated under the choropleth |
 
+## What the build says today
+
+From the checked-in files, `make build` reports: 144 of 150 wards present,
+99 with population, 9 chargers, 728 hex cells; mean coverage score 0.10,
+5.5% of cells covered, 85% of cells with no charger within 2 km, median
+distance to the nearest charger 4.4 km. Ten new stations would lift
+covered demand from 5.5% to 31.6% under uniform demand.
+
 ## What the data cannot tell you
 
 These are printed by `make build`, written to `build_meta.json`, and shown
@@ -96,11 +104,16 @@ on the map. Numbers below are from the checked-in files.
   (including 1–17) have no row. Population weighting is off by default and
   illustrative when on: the data is from 2011 and on a layout that has
   since changed.
-- **Charger data is crowd-sourced.** OpenChargeMap is incomplete for
-  Indian cities and many entries have no operational status or power
-  rating; the build counts both. Reliability, uptime and connector fit for
-  two-wheelers are unknown. `coverage.require_operational` drops
-  unknown-status chargers if you want the pessimistic view.
+- **Charger data is crowd-sourced and sparse.** The cached fetch
+  (2026-09-07) holds **nine** stations inside the bounding box, none with
+  an operational status or an operator, one of them explicitly for
+  two-wheelers. Commercial directories list well over a hundred for
+  Hyderabad, so OpenChargeMap badly undercounts the city; the coverage
+  numbers here describe OpenChargeMap's picture of Hyderabad, not
+  Hyderabad. Reliability, uptime and connector fit are unknown.
+  `coverage.require_operational` drops unknown-status chargers, which with
+  this file drops all of them. Swapping in a fuller source is a matter of
+  writing another loader that returns the same station table.
 - **Reach is straight-line.** A 2 km radius is Euclidean in UTM, not road
   distance, which is longer and asymmetric around lakes, railways and the
   Musi. The extension point is the `Reachability` protocol in

@@ -1,0 +1,420 @@
+{
+ "fetched_at": "2026-09-07T03:17:57+00:00",
+ "source": "https://api.openchargemap.io/v3/poi/",
+ "bbox": {
+  "min_lat": 17.2,
+  "min_lon": 78.2,
+  "max_lat": 17.65,
+  "max_lon": 78.7
+ },
+ "count": 9,
+ "pois": [
+  {
+   "IsRecentlyVerified": true,
+   "DateLastVerified": "2026-07-16T19:06:00Z",
+   "ID": 498735,
+   "UUID": "50DC000C-F178-4212-95F0-2661A70ED9EA",
+   "DataProviderID": 1,
+   "OperatorID": 1,
+   "UsageTypeID": 1,
+   "UsageCost": "DC 240Kw @ Rs 17.99/Kw ",
+   "AddressInfo": {
+    "ID": 499124,
+    "Title": "Bharat Charge 240 Kw Ev Charging Station",
+    "AddressLine1": "Plot No 41, 42 Lahari Estates",
+    "AddressLine2": "Pragathi Nagar",
+    "Town": "Hyderabad",
+    "StateOrProvince": "Telangana",
+    "Postcode": "500090",
+    "CountryID": 106,
+    "Latitude": 17.536408986261023,
+    "Longitude": 78.39305472101819,
+    "ContactTelephone1": "8977245381",
+    "ContactTelephone2": "9704479600",
+    "DistanceUnit": 0
+   },
+   "Connections": [
+    {
+     "ID": 849702,
+     "ConnectionTypeID": 33,
+     "StatusTypeID": 50,
+     "LevelID": 3,
+     "Amps": 250,
+     "PowerKW": 240,
+     "CurrentTypeID": 30,
+     "Quantity": 2
+    },
+    {
+     "ID": 849703,
+     "ConnectionTypeID": 0,
+     "StatusTypeID": 50,
+     "LevelID": 2,
+     "PowerKW": 3.3,
+     "CurrentTypeID": 20,
+     "Quantity": 1
+    },
+    {
+     "ID": 849704,
+     "ConnectionTypeID": 33,
+     "StatusTypeID": 50,
+     "LevelID": 3,
+     "Amps": 250,
+     "PowerKW": 240,
+     "CurrentTypeID": 30,
+     "Quantity": 2
+    },
+    {
+     "ID": 849705,
+     "ConnectionTypeID": 33,
+     "StatusTypeID": 50,
+     "LevelID": 2,
+     "PowerKW": 7.4,
+     "CurrentTypeID": 20,
+     "Quantity": 2
+    }
+   ],
+   "NumberOfPoints": 7,
+   "StatusTypeID": 50,
+   "DateLastStatusUpdate": "2026-07-16T19:06:00Z",
+   "DataQualityLevel": 1,
+   "DateCreated": "2026-07-13T19:02:00Z",
+   "SubmissionStatusTypeID": 200
+  },
+  {
+   "IsRecentlyVerified": true,
+   "DateLastVerified": "2026-07-16T19:26:00Z",
+   "ID": 149524,
+   "UUID": "AE03422E-3F70-449D-B083-A3263928AA15",
+   "DataProviderID": 1,
+   "OperatorID": 1,
+   "UsageTypeID": 1,
+   "UsageCost": "Rs 17.99/Kw",
+   "AddressInfo": {
+    "ID": 149877,
+    "Title": "Bharat Charge Ev Charging Station",
+    "AddressLine1": "Hyder Nagar, RamNaresh Nagar",
+    "Town": "Hyderabad",
+    "StateOrProvince": "Telangana",
+    "Postcode": "500090",
+    "CountryID": 106,
+    "Latitude": 17.5365276,
+    "Longitude": 78.3930837,
+    "ContactTelephone1": "8977245381",
+    "ContactTelephone2": "9704479600",
+    "DistanceUnit": 0
+   },
+   "Connections": [
+    {
+     "ID": 207600,
+     "ConnectionTypeID": 0,
+     "StatusTypeID": 50
+    },
+    {
+     "ID": 841382,
+     "ConnectionTypeID": 33,
+     "StatusTypeID": 50,
+     "LevelID": 3,
+     "Amps": 250,
+     "Voltage": 450,
+     "PowerKW": 240,
+     "CurrentTypeID": 30,
+     "Quantity": 4
+    },
+    {
+     "ID": 850808,
+     "ConnectionTypeID": 33,
+     "StatusTypeID": 50,
+     "LevelID": 2,
+     "PowerKW": 7.4,
+     "CurrentTypeID": 20,
+     "Quantity": 2
+    },
+    {
+     "ID": 850809,
+     "ConnectionTypeID": 0,
+     "StatusTypeID": 50,
+     "LevelID": 2,
+     "PowerKW": 3.3,
+     "CurrentTypeID": 20,
+     "Quantity": 1
+    }
+   ],
+   "NumberOfPoints": 4,
+   "GeneralComments": "Ultra Fast 240kW Dispenser Chargers with 4 Commectors",
+   "StatusTypeID": 50,
+   "DateLastStatusUpdate": "2026-07-16T19:26:00Z",
+   "DataQualityLevel": 1,
+   "DateCreated": "2020-02-27T15:19:00Z",
+   "SubmissionStatusTypeID": 200
+  },
+  {
+   "IsRecentlyVerified": false,
+   "DateLastVerified": "2023-03-26T11:52:00Z",
+   "ID": 149534,
+   "UUID": "07891543-1600-4BD9-9907-6EB856D37758",
+   "DataProviderID": 1,
+   "OperatorID": 1,
+   "UsageTypeID": 6,
+   "AddressInfo": {
+    "ID": 149887,
+    "Title": "Fortum Mahindra",
+    "AddressLine1": "Chikoti Gardens, Old Patigadda, Chikoti Gardens, Begumpet, Hyderabad, Telangana 500016, India",
+    "Town": "Hyderabad",
+    "StateOrProvince": "Telangana",
+    "Postcode": "500016",
+    "CountryID": 106,
+    "Latitude": 17.44366,
+    "Longitude": 78.46395,
+    "DistanceUnit": 0
+   },
+   "Connections": [
+    {
+     "ID": 207612,
+     "ConnectionTypeID": 0,
+     "StatusTypeID": 50
+    }
+   ],
+   "NumberOfPoints": 1,
+   "StatusTypeID": 50,
+   "DateLastStatusUpdate": "2023-03-26T11:52:00Z",
+   "DataQualityLevel": 1,
+   "DateCreated": "2020-02-27T16:28:00Z",
+   "SubmissionStatusTypeID": 200
+  },
+  {
+   "IsRecentlyVerified": true,
+   "DateLastVerified": "2026-08-08T10:10:00Z",
+   "ID": 502275,
+   "UUID": "37FC241F-CF6B-410D-9736-EE7E71FED250",
+   "DataProviderID": 1,
+   "OperatorID": 1,
+   "UsageTypeID": 1,
+   "AddressInfo": {
+    "ID": 502664,
+    "Title": "MobiLane CRVRGROWA-EV CHARGING STATION - 2",
+    "AddressLine1": "Cybercity Marina Skies, Green Hills Rd, opp. to IDL Lake Road, Cybercity, Kukatpally, Hyderabad, Telangana 500018",
+    "Town": "Hyderabad",
+    "StateOrProvince": "Telangana",
+    "Postcode": "500018",
+    "CountryID": 106,
+    "Latitude": 17.46563933,
+    "Longitude": 78.40803289,
+    "DistanceUnit": 0
+   },
+   "Connections": [
+    {
+     "ID": 860202,
+     "ConnectionTypeID": 0,
+     "StatusTypeID": 50,
+     "LevelID": 2,
+     "PowerKW": 7.4,
+     "CurrentTypeID": 20,
+     "Quantity": 1
+    }
+   ],
+   "NumberOfPoints": 1,
+   "StatusTypeID": 50,
+   "DateLastStatusUpdate": "2026-08-08T10:10:00Z",
+   "DataQualityLevel": 1,
+   "DateCreated": "2026-08-05T10:06:00Z",
+   "SubmissionStatusTypeID": 200
+  },
+  {
+   "IsRecentlyVerified": false,
+   "DateLastVerified": "2023-04-04T10:44:00Z",
+   "ID": 149533,
+   "UUID": "7C1F98CC-DAB5-4567-A96D-CA57F68069ED",
+   "DataProviderID": 1,
+   "OperatorID": 1,
+   "UsageTypeID": 6,
+   "AddressInfo": {
+    "ID": 149886,
+    "Title": "Amplify Mobility",
+    "AddressLine1": "8-2, 335/2, Rd Number 5, SBI Executive Enclave, Green Valley, Banjara Hills.",
+    "Town": "Hyderabad",
+    "StateOrProvince": "Telangana",
+    "Postcode": "500034",
+    "CountryID": 106,
+    "Latitude": 17.4249236,
+    "Longitude": 78.4219657,
+    "RelatedURL": "https://www.chargelist.com/",
+    "DistanceUnit": 0
+   },
+   "Connections": [
+    {
+     "ID": 207611,
+     "ConnectionTypeID": 0,
+     "StatusTypeID": 50
+    }
+   ],
+   "NumberOfPoints": 1,
+   "StatusTypeID": 50,
+   "DateLastStatusUpdate": "2023-04-04T10:44:00Z",
+   "DataQualityLevel": 1,
+   "DateCreated": "2020-02-27T16:22:00Z",
+   "SubmissionStatusTypeID": 200
+  },
+  {
+   "IsRecentlyVerified": true,
+   "DateLastVerified": "2026-06-20T03:04:00Z",
+   "ID": 494161,
+   "UUID": "ADD59873-FBB0-4C5F-B30F-75C91C5A2395",
+   "DataProviderID": 1,
+   "OperatorID": 1,
+   "UsageTypeID": 1,
+   "UsageCost": "16",
+   "AddressInfo": {
+    "ID": 494550,
+    "Title": "SASS EV charging station\u26fd",
+    "AddressLine1": "HUDA layout, plot number 111D, Nallagandla, Hyderabad, Telangana ",
+    "AddressLine2": "",
+    "Town": "Nallagandla",
+    "StateOrProvince": "Telangana",
+    "Postcode": "500019",
+    "CountryID": 106,
+    "Latitude": 17.46701200951925,
+    "Longitude": 78.30910573683411,
+    "ContactTelephone1": "7995854617",
+    "AccessComments": "exactly behind DMart Nallagandla",
+    "DistanceUnit": 0
+   },
+   "Connections": [
+    {
+     "ID": 839751,
+     "ConnectionTypeID": 33,
+     "StatusTypeID": 50,
+     "LevelID": 3,
+     "Amps": 250,
+     "Voltage": 800,
+     "PowerKW": 60,
+     "CurrentTypeID": 30,
+     "Quantity": 4
+    }
+   ],
+   "NumberOfPoints": 4,
+   "StatusTypeID": 50,
+   "DateLastStatusUpdate": "2026-06-20T03:04:00Z",
+   "DataQualityLevel": 1,
+   "DateCreated": "2026-06-17T02:59:00Z",
+   "SubmissionStatusTypeID": 200
+  },
+  {
+   "IsRecentlyVerified": false,
+   "DateLastVerified": "2017-12-08T08:52:00Z",
+   "ID": 96047,
+   "UUID": "FF7F51F6-272F-4B43-B8BB-4D3B31ACD187",
+   "DataProviderID": 1,
+   "UsageTypeID": 6,
+   "AddressInfo": {
+    "ID": 96393,
+    "Title": "Tellus Power ",
+    "AddressLine1": "Gamut De Lousa ",
+    "AddressLine2": "Banjara Hills",
+    "Town": "Hyderabad",
+    "StateOrProvince": "Telangana",
+    "Postcode": "500034",
+    "CountryID": 106,
+    "Latitude": 17.4133616071295,
+    "Longitude": 78.4265966206543,
+    "RelatedURL": "http://www.telluspower.com",
+    "DistanceUnit": 0
+   },
+   "Connections": [
+    {
+     "ID": 136065,
+     "ConnectionTypeID": 1,
+     "StatusTypeID": 50,
+     "LevelID": 2,
+     "Amps": 30,
+     "Voltage": 240,
+     "PowerKW": 7.2,
+     "CurrentTypeID": 10,
+     "Quantity": 1
+    }
+   ],
+   "NumberOfPoints": 2,
+   "GeneralComments": "Tellus Power AC Dual port charger with J1772 Connector @ 7.KW each port",
+   "StatusTypeID": 50,
+   "DateLastStatusUpdate": "2017-12-08T08:52:00Z",
+   "DataQualityLevel": 1,
+   "DateCreated": "2017-12-07T10:12:00Z",
+   "SubmissionStatusTypeID": 200
+  },
+  {
+   "IsRecentlyVerified": false,
+   "DateLastVerified": "2023-03-26T11:51:00Z",
+   "ID": 149527,
+   "UUID": "5230B236-2980-4C01-86F4-00DE07C58A57",
+   "DataProviderID": 1,
+   "OperatorID": 1,
+   "UsageTypeID": 6,
+   "AddressInfo": {
+    "ID": 149880,
+    "Title": "Fortum Mahindra ",
+    "AddressLine1": "Unnamed Road, Maruthi Nagar, Attapur.",
+    "Town": "Hyderabad",
+    "StateOrProvince": "Telangana",
+    "Postcode": "500264",
+    "CountryID": 106,
+    "Latitude": 17.36334,
+    "Longitude": 78.4337,
+    "DistanceUnit": 0
+   },
+   "Connections": [
+    {
+     "ID": 207605,
+     "ConnectionTypeID": 0,
+     "StatusTypeID": 50
+    }
+   ],
+   "NumberOfPoints": 1,
+   "StatusTypeID": 50,
+   "DateLastStatusUpdate": "2023-03-26T11:51:00Z",
+   "DataQualityLevel": 1,
+   "DateCreated": "2020-02-27T15:28:00Z",
+   "SubmissionStatusTypeID": 200
+  },
+  {
+   "IsRecentlyVerified": false,
+   "DateLastVerified": "2026-03-03T14:43:00Z",
+   "ID": 479445,
+   "UUID": "730E15EF-24C7-4AE5-A397-0486AC9002C6",
+   "DataProviderID": 1,
+   "OperatorID": 3850,
+   "UsageTypeID": 4,
+   "UsageCost": "29 per kwh",
+   "AddressInfo": {
+    "ID": 479834,
+    "Title": "Blaze Fast Charger For 2 Ev Wheeler ",
+    "AddressLine1": "",
+    "AddressLine2": "PLOT NO 6, Nagarjuna Sagar Rd, opposite Alekhya Towers, Sagar Enclave, Hyderabad, Bairamalguda, Telangana 500035",
+    "Town": "Lb Nagar ",
+    "StateOrProvince": "Telangana ",
+    "CountryID": 106,
+    "Latitude": 17.340475789422385,
+    "Longitude": 78.54539549782817,
+    "ContactTelephone1": "8919407736",
+    "AccessComments": "Inside bats and bites Drive-In ",
+    "RelatedURL": "https://boltearth.app.link/MyIXiaV270b",
+    "DistanceUnit": 0
+   },
+   "Connections": [
+    {
+     "ID": 805071,
+     "ConnectionTypeID": 1036,
+     "StatusTypeID": 50,
+     "Amps": 15,
+     "PowerKW": 3,
+     "CurrentTypeID": 30,
+     "Quantity": 1
+    }
+   ],
+   "NumberOfPoints": 1,
+   "StatusTypeID": 50,
+   "DateLastStatusUpdate": "2026-03-03T14:43:00Z",
+   "DataQualityLevel": 1,
+   "DateCreated": "2026-02-28T14:42:00Z",
+   "SubmissionStatusTypeID": 200
+  }
+ ]
+}
