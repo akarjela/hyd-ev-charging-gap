@@ -6,10 +6,10 @@ from hydgap.ingest.population import join_population, load_population
 from hydgap.ingest.wards import load_wards, parse_ward_name, report_ward_gaps
 
 
-def test_config_loads_and_hashes(tiny_config):
+def test_config_loads_and_hashes(fixtures, tiny_config):
     assert tiny_config.coverage.service_radius_m == 2000
     assert len(config_hash(tiny_config)) == 12
-    assert config_hash(tiny_config) == config_hash(load_config(__import__("tests.conftest", fromlist=["FIXTURES"]).FIXTURES / "model_tiny.yaml"))
+    assert config_hash(tiny_config) == config_hash(load_config(fixtures / "model_tiny.yaml"))
 
 
 def test_ward_name_parses():

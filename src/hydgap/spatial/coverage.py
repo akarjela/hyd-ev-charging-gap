@@ -18,7 +18,7 @@ def coverage_score(n_within: np.ndarray, nearest_m: np.ndarray, cfg: CoverageCon
 
 def usable_stations(stations: gpd.GeoDataFrame, cfg: CoverageConfig) -> gpd.GeoDataFrame:
     if cfg.require_operational and "is_operational" in stations.columns:
-        return stations[stations["is_operational"] == True]
+        return stations[stations["is_operational"].eq(True)]
     return stations
 
 

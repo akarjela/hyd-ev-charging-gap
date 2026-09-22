@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import os
+from collections.abc import Callable
 from contextlib import asynccontextmanager
 from functools import lru_cache
 from pathlib import Path
@@ -27,8 +28,8 @@ def feature_collection(gdf: gpd.GeoDataFrame, columns: list[str]) -> dict:
     keep = [c for c in columns if c in gdf.columns]
     wgs = to_wgs84(gdf[keep + ["geometry"]])
     props = wgs[keep].astype(object).where(pd.notna(wgs[keep]), None)
-    wgs = gpd.GeoDataFrame(props, geometry=wgs.geometry, crs=wgs.crs)
-    return json.loads(wgs.to_json(drop_id=True))
+    out = gpd.GeoDataFrame(props, geometry=wgs.geometry, crs=wgs.crs)
+    return json.loads(out.to_json(drop_id=True))
 
 
 def create_app(processed: Path | str | None = None, config: Path | str | None = None) -> FastAPI:
@@ -57,34 +58,32 @@ def create_app(processed: Path | str | None = None, config: Path | str | None = 
 
     app = FastAPI(title="hydgap", lifespan=lifespan)
 
-    def art() -> Artifacts:
+    def loaded(key: str):
+        """State filled by the lifespan handler; 503 until the build is in memory."""
         if "art" not in state:
             raise HTTPException(503, "artifacts not loaded")
-        return state["art"]
+        return state[key]
 
     @app.get("/api/meta")
     def meta() -> dict:
-        return art().meta
+        return loaded("art").meta
 
     @app.get("/api/cells")
     def cells() -> dict:
-        art()
-        return state["cells_geojson"]
+        return loaded("cells_geojson")
 
     @app.get("/api/wards")
     def wards() -> dict:
-        art()
-        return state["wards_geojson"]
+        return loaded("wards_geojson")
 
     @app.get("/api/wards/ranking")
     def ranking(limit: int = Query(20, ge=1, le=500)) -> list[dict]:
-        w = art().wards.drop(columns="geometry").head(limit)
+        w = loaded("art").wards.drop(columns="geometry").head(limit)
         return json.loads(w.to_json(orient="records"))
 
     @app.get("/api/stations")
     def stations() -> dict:
-        art()
-        return state["stations_geojson"]
+        return loaded("stations_geojson")
 
     @app.get("/api/optimize", response_model=OptimizeOut)
     def optimize(
@@ -92,12 +91,12 @@ def create_app(processed: Path | str | None = None, config: Path | str | None = 
         site_cost: float = Query(None, gt=0),
         radius_m: float = Query(None, gt=0),
     ) -> OptimizeOut:
-        art()
+        run = loaded("optimize")
         cfg: ModelConfig = state["cfg"]
         b = budget if budget is not None else cfg.optimizer.default_budget
         c = site_cost if site_cost is not None else cfg.optimizer.site_cost
         r = radius_m if radius_m is not None else cfg.coverage.service_radius_m
-        return state["optimize"](b, c, r)
+        return run(b, c, r)
 
     @app.get("/", include_in_schema=False)
     def index() -> FileResponse:
@@ -107,7 +106,7 @@ def create_app(processed: Path | str | None = None, config: Path | str | None = 
     return app
 
 
-def _make_optimizer(art: Artifacts, cfg: ModelConfig):
+def _make_optimizer(art: Artifacts, cfg: ModelConfig) -> Callable[[float, float, float], OptimizeOut]:
     centroids = to_wgs84(gpd.GeoDataFrame(geometry=art.cells.geometry.centroid, crs=art.cells.crs))
     lat = dict(zip(art.cells["h3"], centroids.geometry.y))
     lon = dict(zip(art.cells["h3"], centroids.geometry.x))

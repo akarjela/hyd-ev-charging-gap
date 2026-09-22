@@ -17,14 +17,12 @@ class GreedySiter:
         )
         spent = 0.0
         cumulative = 0.0
+        is_candidate = np.zeros(p.n, dtype=bool)
+        is_candidate[p.candidates] = True
         while True:
-            remaining = p.budget - spent
             uncovered_demand = p.demand * (~covered)
             gains = np.asarray(p.neighbors @ uncovered_demand).ravel()
-            mask = np.zeros(p.n, dtype=bool)
-            mask[p.candidates] = True
-            mask &= ~chosen
-            mask &= p.costs <= remaining + 1e-12
+            mask = is_candidate & ~chosen & (p.costs <= p.budget - spent + 1e-12)
             if not mask.any():
                 break
             gains = np.where(mask, gains, -np.inf)

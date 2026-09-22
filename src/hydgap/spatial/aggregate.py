@@ -25,8 +25,9 @@ def aggregate_wards(cells: gpd.GeoDataFrame, wards: gpd.GeoDataFrame, cfg: Model
         share_zero_chargers=("zero_chargers", "mean"),
         nearest_m_median=("nearest_m", "median"),
     )
-    weighted = g.apply(lambda x: np.average(x["score"], weights=x["demand"]) if x["demand"].sum() > 0 else x["score"].mean())
-    summary["mean_score"] = weighted
+    summary["mean_score"] = g.apply(
+        lambda x: np.average(x["score"], weights=x["demand"]) if x["demand"].sum() > 0 else x["score"].mean()
+    )
     summary = summary.reset_index()
 
     keep = [col for col in ("ward_no", "ward_name", "population", "geometry") if col in wards.columns]

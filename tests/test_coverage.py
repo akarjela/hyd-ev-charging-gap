@@ -26,12 +26,11 @@ def test_score_formula_and_bounds():
 
 
 def test_hand_computed_distance_in_metres():
-    a = gpd.GeoDataFrame(geometry=[Point(78.40, 17.40)], crs="EPSG:4326")
-    b = gpd.GeoDataFrame(geometry=[Point(78.40, 17.40 + 0.0271)], crs="EPSG:4326")
-    d = StraightLineReachability().nearest(
-        np.array([[a.to_crs("EPSG:32644").geometry.x[0], a.to_crs("EPSG:32644").geometry.y[0]]]),
-        np.array([[b.to_crs("EPSG:32644").geometry.x[0], b.to_crs("EPSG:32644").geometry.y[0]]]),
-    )[0]
+    pair = gpd.GeoDataFrame(
+        geometry=[Point(78.40, 17.40), Point(78.40, 17.40 + 0.0271)], crs="EPSG:4326"
+    ).to_crs("EPSG:32644")
+    a, b = (np.array([[p.x, p.y]]) for p in pair.geometry)
+    d = StraightLineReachability().nearest(a, b)[0]
     assert abs(d - 2997) < 5
 
 

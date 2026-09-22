@@ -8,7 +8,7 @@ maximal covering, the same formulation an ILP would use.
 
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass, field
+from dataclasses import dataclass, field
 from typing import Protocol
 
 import geopandas as gpd
@@ -68,16 +68,6 @@ class SitingResult:
     @property
     def covered_after(self) -> float:
         return self.baseline_covered + self.total_gain
-
-    def as_dict(self) -> dict:
-        return {
-            "sites": [asdict(s) for s in self.sites],
-            "baseline_covered": self.baseline_covered,
-            "covered_after": self.covered_after,
-            "total_demand": self.total_demand,
-            "total_gain": self.total_gain,
-            "spent": self.spent,
-        }
 
 
 class Siter(Protocol):

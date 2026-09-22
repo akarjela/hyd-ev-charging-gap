@@ -20,6 +20,7 @@ from hydgap.config import BBox
 from hydgap.spatial.crs import WGS84
 
 OCM_URL = "https://api.openchargemap.io/v3/poi/"
+COLUMNS = ["ocm_id", "title", "operator", "n_connections", "max_power_kw", "is_operational", "geometry"]
 
 
 @dataclass
@@ -61,10 +62,8 @@ def fetch_stations(bbox: BBox, api_key: str, out_path: Path | str, max_results: 
 
 
 def _operational(poi: dict) -> bool | None:
-    status = poi.get("StatusType") or {}
-    if "IsOperational" in status and status["IsOperational"] is not None:
-        return bool(status["IsOperational"])
-    return None
+    flag = (poi.get("StatusType") or {}).get("IsOperational")
+    return None if flag is None else bool(flag)
 
 
 def _max_power(poi: dict) -> float | None:
@@ -74,11 +73,10 @@ def _max_power(poi: dict) -> float | None:
 
 def load_stations(path: Path | str) -> tuple[gpd.GeoDataFrame, StationReport]:
     data = json.loads(Path(path).read_text(encoding="utf-8"))
-    fetched_at = None
-    pois = data
     if isinstance(data, dict):
-        pois = data.get("pois", [])
-        fetched_at = data.get("fetched_at")
+        pois, fetched_at = data.get("pois", []), data.get("fetched_at")
+    else:
+        pois, fetched_at = data, None
 
     rows, dropped = [], 0
     for poi in pois:
@@ -98,17 +96,13 @@ def load_stations(path: Path | str) -> tuple[gpd.GeoDataFrame, StationReport]:
                 "geometry": Point(float(lon), float(lat)),
             }
         )
-    stations = gpd.GeoDataFrame(rows, geometry="geometry", crs=WGS84) if rows else gpd.GeoDataFrame(
-        columns=["ocm_id", "title", "operator", "n_connections", "max_power_kw", "is_operational", "geometry"],
-        geometry="geometry",
-        crs=WGS84,
-    )
+    stations = gpd.GeoDataFrame(rows, columns=COLUMNS, geometry="geometry", crs=WGS84)
     report = StationReport(
         total=len(pois),
         kept=len(stations),
         dropped_no_coords=dropped,
-        unknown_status=int(stations["is_operational"].isna().sum()) if len(stations) else 0,
-        unknown_power=int(stations["max_power_kw"].isna().sum()) if len(stations) else 0,
+        unknown_status=int(stations["is_operational"].isna().sum()),
+        unknown_power=int(stations["max_power_kw"].isna().sum()),
         fetched_at=fetched_at,
     )
     return stations, report

@@ -18,7 +18,7 @@ def test_csv_loader_matches_aliases_and_drops_bad_rows(fixtures):
     assert stations.crs.to_epsg() == 4326
     row = stations[stations["title"] == "CSV in ward 4"].iloc[0]
     assert row["operator"] == "Alt Op"
-    assert row["is_operational"] is False or row["is_operational"] == False
+    assert row["is_operational"] is False
     assert stations["max_power_kw"].isna().sum() == 1
 
 
@@ -30,9 +30,8 @@ def test_csv_loader_requires_coordinates(tmp_path):
 
 
 def test_merge_dedupes_within_radius(fixtures, tiny_config):
-    raw = fixtures
     cfg = StationsConfig(source="both", ocm_file="stations_tiny.json", csv_file="stations_tiny.csv", dedupe_m=50)
-    stations, meta = load_station_layer(cfg, raw, tiny_config.crs_metric)
+    stations, meta = load_station_layer(cfg, fixtures, tiny_config.crs_metric)
     assert meta["source"] == "both"
     assert meta["ocm"]["kept"] == 3
     assert meta["csv"]["kept"] == 3
@@ -41,7 +40,7 @@ def test_merge_dedupes_within_radius(fixtures, tiny_config):
     assert set(stations["source"]) == {"ocm", "csv"}
 
     far = StationsConfig(source="both", ocm_file="stations_tiny.json", csv_file="stations_tiny.csv", dedupe_m=0)
-    stations2, meta2 = load_station_layer(far, raw, tiny_config.crs_metric)
+    stations2, meta2 = load_station_layer(far, fixtures, tiny_config.crs_metric)
     assert meta2["duplicates_dropped"] == 0 and len(stations2) == 6
 
 

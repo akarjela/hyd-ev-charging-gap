@@ -48,20 +48,20 @@ def load_station_layer(cfg: StationsConfig, raw_dir: Path | str, crs_metric: str
         meta["csv"] = {"file": cfg.csv_file, **csv_report.as_dict()}
 
     if cfg.source == "ocm":
-        stations, report = ocm, ocm_report
+        stations, dropped = ocm, ocm_report.dropped_no_coords
     elif cfg.source == "csv":
-        stations, report = extra, csv_report
+        stations, dropped = extra, csv_report.dropped_no_coords
     else:
         stations, duplicates = merge_stations(ocm, extra, cfg.dedupe_m, crs_metric)
         meta["duplicates_dropped"] = duplicates
         meta["dedupe_m"] = cfg.dedupe_m
-        report = None
+        dropped = meta["ocm"]["dropped_no_coords"] + meta["csv"]["dropped_no_coords"]
 
     meta.update(
         {
             "total": len(stations),
             "kept": len(stations),
-            "dropped_no_coords": (report.dropped_no_coords if report else meta["ocm"]["dropped_no_coords"] + meta["csv"]["dropped_no_coords"]),
+            "dropped_no_coords": dropped,
             "unknown_status": int(stations["is_operational"].isna().sum()) if len(stations) else 0,
             "unknown_power": int(stations["max_power_kw"].isna().sum()) if len(stations) else 0,
             "fetched_at": meta.get("ocm", {}).get("fetched_at"),
